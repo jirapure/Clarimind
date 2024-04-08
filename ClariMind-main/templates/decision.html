@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <title>Decision Tool</title>
+</head>
+
+<body>
+    <header>
+        <div class="flex items-center justify-between container">
+            <a href="" class="site-logo">
+                Site Logo
+            </a>
+            <a href="javascript:void(0);" class="logOutBtn" id="logout">
+                <img src="../static/images/logout-icon.png">
+            </a>
+        </div>
+    </header>
+
+    <section class="prosConsContent">
+        <div class="generated-container">
+            <div class="main">
+                <div class="presentation">
+                    <div class="center-message">
+                        How can I help you today?
+                    </div>
+                    <div class="generated-data" id="renerated-data">
+                        <div class="inner-block" {% if not user_prompt %} style="display: none; " {% endif %}>
+                            <div class="container flex flex-col">
+                                <div class="user-prompt flex items-start justify-end">
+                                    <blockquote>
+                                        <h2>You</h2>
+                                        <p class="UserPrompt">{{ user_prompt }}</p>
+                                    </blockquote>
+                                    <div class="user-icon">
+                                        <img src="../static/images/depositphotos.png" alt="image" loading="lazy">
+                                    </div>
+                                </div>
+                                <div class="ai-ans flex items-start justify-end">
+                                    <div class="user-icon">
+                                        <img src="../static/images/depositphotos.png" alt="image" loading="lazy">
+                                    </div>
+                                    <blockquote>
+                                        <h2>AI</h2>
+                                        <div id="decision-response">
+                                            {% if results %}
+                                              {% for option, pros, cons in results %}
+                                                <h2>Decision: {{ option }}</h2><br>
+                                                <strong>Pros:</strong>
+                                                <ul>
+                                                  {% for pro in pros.split('\n') %}
+                                                    <li style="list-style-type: none;">{{ pro.strip() }}</li>
+                                                  {% endfor %}
+                                                </ul><br>
+                                                <strong>Cons:</strong>
+                                                <ul>
+                                                  {% for con in cons.split('\n') %}
+                                                    <li style="list-style-type: none;">{{ con.strip() }}</li>
+                                                  {% endfor %}
+                                                </ul><br>
+                                              {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                        <ul class="shareModal">
+                                            <li>
+                                                <a href="javascript:void(0);" class="regenerateUserPrompt">
+                                                    <svg width="30" height="31" viewBox="0 0 30 31" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                                            d="M3.07555 0C3.95025 0 4.65935 0.709095 4.65935 1.58379V4.07345C7.34976 1.5483 10.9705 0 14.954 0C23.2637 0 30 6.73632 30 15.046C30 23.3557 23.2637 30.092 14.954 30.092C7.24203 30.092 0.887199 24.2914 0.0109187 16.8142C-0.0909032 15.9454 0.53083 15.1586 1.39959 15.0568C2.26834 14.9549 3.05516 15.5767 3.15696 16.4455C3.84841 22.3455 8.8676 26.9244 14.954 26.9244C21.5142 26.9244 26.8324 21.6062 26.8324 15.046C26.8324 8.48573 21.5142 3.16758 14.954 3.16758C11.4373 3.16758 8.27609 4.69545 6.09987 7.12706H10.2026C11.0773 7.12706 11.7864 7.83615 11.7864 8.71085C11.7864 9.58555 11.0773 10.2946 10.2026 10.2946H3.07555C2.22132 10.2946 1.52504 9.61835 1.49292 8.77197C1.49149 8.7389 1.4911 8.70573 1.49176 8.67252V1.58379C1.49176 0.709095 2.20084 0 3.07555 0Z"
+                                                            fill="#FFF" />
+                                                    </svg>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0);" class="like">
+                                                    <svg width="34" height="30" viewBox="0 0 34 30" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M10.25 2C5.69375 2 2 5.69375 2 10.25C2 18.5 11.75 26 17 27.7445C22.25 26 32 18.5 32 10.25C32 5.69375 28.3062 2 23.75 2C20.96 2 18.4925 3.38525 17 5.5055C16.2393 4.42191 15.2286 3.53757 14.0536 2.92737C12.8787 2.31716 11.574 1.99907 10.25 2Z"
+                                                            stroke="#FFF" stroke-width="3" stroke-linecap="round"
+                                                            stroke-linejoin="round" />
+                                                    </svg>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0);" class="share">
+                                                    <svg width="30" height="34" viewBox="0 0 30 34" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M25 33.3333C23.6111 33.3333 22.4306 32.8472 21.4583 31.875C20.4861 30.9028 20 29.7222 20 28.3333C20 28.1389 20.0139 27.9372 20.0417 27.7283C20.0694 27.5194 20.1111 27.3322 20.1667 27.1667L8.41667 20.3333C7.94444 20.75 7.41667 21.0767 6.83333 21.3133C6.25 21.55 5.63889 21.6678 5 21.6667C3.61111 21.6667 2.43056 21.1806 1.45833 20.2083C0.486111 19.2361 0 18.0556 0 16.6667C0 15.2778 0.486111 14.0972 1.45833 13.125C2.43056 12.1528 3.61111 11.6667 5 11.6667C5.63889 11.6667 6.25 11.785 6.83333 12.0217C7.41667 12.2583 7.94444 12.5844 8.41667 13L20.1667 6.16667C20.1111 6 20.0694 5.81278 20.0417 5.605C20.0139 5.39722 20 5.19556 20 5C20 3.61111 20.4861 2.43056 21.4583 1.45833C22.4306 0.486111 23.6111 0 25 0C26.3889 0 27.5694 0.486111 28.5417 1.45833C29.5139 2.43056 30 3.61111 30 5C30 6.38889 29.5139 7.56944 28.5417 8.54167C27.5694 9.51389 26.3889 10 25 10C24.3611 10 23.75 9.88222 23.1667 9.64667C22.5833 9.41111 22.0556 9.08444 21.5833 8.66667L9.83333 15.5C9.88889 15.6667 9.93056 15.8544 9.95833 16.0633C9.98611 16.2722 10 16.4733 10 16.6667C10 16.8611 9.98611 17.0628 9.95833 17.2717C9.93056 17.4806 9.88889 17.6678 9.83333 17.8333L21.5833 24.6667C22.0556 24.25 22.5833 23.9239 23.1667 23.6883C23.75 23.4528 24.3611 23.3344 25 23.3333C26.3889 23.3333 27.5694 23.8194 28.5417 24.7917C29.5139 25.7639 30 26.9444 30 28.3333C30 29.7222 29.5139 30.9028 28.5417 31.875C27.5694 32.8472 26.3889 33.3333 25 33.3333Z"
+                                                            fill="#FFF" />
+                                                    </svg>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </blockquote>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="prosConsForm">
+                        <div class="container">
+                            <div class="common-questions flex items-center justify-between">
+                                <a href="javascript:void(0);" class="common-question">
+                                    Should i eat junk ?
+                                    <span>
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                            class="icon-sm text-token-text-primary">
+                                            <path d="M7 11L12 6L17 11M12 18V7" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round"></path>
+                                        </svg>
+                                    </span>
+                                </a>
+                                <a href="javascript:void(0);" class="common-question">
+                                    Should I dance on road?
+                                    <span>
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                            class="icon-sm text-token-text-primary">
+                                            <path d="M7 11L12 6L17 11M12 18V7" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round"></path>
+                                        </svg>
+                                    </span>
+                                </a>
+                                <a href="javascript:void(0);" class="common-question">
+                                    Should I sleep in afternoon?
+                                    <span>
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                            class="icon-sm text-token-text-primary">
+                                            <path d="M7 11L12 6L17 11M12 18V7" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round"></path>
+                                        </svg>
+                                    </span>
+                                </a>
+                                <a href="javascript:void(0);" class="common-question">
+                                    Should I go club everyday?
+                                    <span>
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                            class="icon-sm text-token-text-primary">
+                                            <path d="M7 11L12 6L17 11M12 18V7" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round"></path>
+                                        </svg>
+                                    </span>
+                                </a>
+                            </div>
+                            <div class="decisionForm">
+                                <form method="post" id="bottom-form">
+                                    <fieldset>
+                                        <textarea type="text" size="50" id="user_prompt" class="user_prompt"
+                                            name="user_prompt" placeholder="Enter a scenario for decision-making"
+                                            required></textarea>
+                                        <button type="button" id="sendButton" class="sendButton">
+                                            <svg class="sendMessage" width="24" height="24" viewBox="0 0 24 24"
+                                                fill="none" class="text-white dark:text-black">
+                                                <path d="M7 11L12 6L17 11M12 18V7" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                </path>
+                                            </svg>
+                                            <svg class="loadingMessage" stroke="currentColor" fill="none"
+                                                stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round"
+                                                stroke-linejoin="round" class="animate-spin text-center icon-md"
+                                                height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                                                <line x1="12" y1="2" x2="12" y2="6"></line>
+                                                <line x1="12" y1="18" x2="12" y2="22"></line>
+                                                <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
+                                                <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
+                                                <line x1="2" y1="12" x2="6" y2="12"></line>
+                                                <line x1="18" y1="12" x2="22" y2="12"></line>
+                                                <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line>
+                                                <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
+                                            </svg>
+                                        </button>
+                                    </fieldset>
+                                    <div id="mistakes-text">
+                                        <p>ClariMind can make mistakes. Consider Checking important information</p>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="shareModalPopup shareModal">
+        <div class="overlay"></div>
+        <div class="content">
+            <ul class="shareModal">
+                <li>
+                    <a href="#" id="facebookShare">
+                        <img src="../static/images/facebook.png" alt="image" loading="lazy">
+                    </a>
+                </li>
+                <li>
+                    <a href="#" id="twitterShare">
+                        <img src="../static/images/twitter.png" alt="image" loading="lazy">
+                    </a>
+                </li>
+                <li>
+                    <a href="#" id="linkedInShare">
+                        <img src="../static/images/linkedin.png" alt="image" loading="lazy">
+                    </a>
+                </li>
+                <li>
+                    <a href="#" id="telegramShare">
+                        <img src="../static/images/telegram.png" alt="image" loading="lazy">
+                    </a>
+                </li>
+                <li>
+                    <a href="#" id="whatsAppShare">
+                        <img src="../static/images/whatsapp.png" alt="image" loading="lazy">
+                    </a>
+                </li>
+                <li>
+                    <a href="#" id="skypeShare">
+                        <img src="../static/images/skype.png" alt="image" loading="lazy">
+                    </a>
+                </li>
+                <li>
+                    <a href="#" id="emailShare">
+                        <img src="../static/images/e-mail.png" alt="image" loading="lazy">
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="shareModalPopup feedback">
+        <div class="overlay"></div>
+        <div class="content">
+            <div id="feedbackBox" class="modal modal-trigger">
+                <form id="feedbackForm" class="modal-content" method="post" action="">
+                    <h2>Provide Feedback:</h2>
+                    <span style="display: none;" id="dislike-data">
+                        <label>
+                            <input type="checkbox" name="abusive" class="abusive" value="1">
+                            Was it abusive??
+                        </label><br>
+                        <label>
+                            <input type="checkbox" name="harmful" class="harmful" value="1">
+                            was it harmful??
+                        </label><br>
+                    </span>
+                    <input type="hidden" name="prompt" id="prompt" class="prompt" value="{{ user_prompt }}">
+                    <input type="hidden" name="feedback_type" id="feedback_type" class="feedback_type">
+                    <textarea name="feedback_text" id="feedback_text" class="feedback-like-text"
+                        placeholder="We value your feedback. Please share your thoughts with us."></textarea>
+                    <button type="button" class="feedback-like-button">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+<script src="https://unpkg.com/share-api"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="../static/script/decision.js"></script>
+<script src="../static/script/script.js"></script>
+
+</html>

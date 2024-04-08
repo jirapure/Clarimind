@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <title>Create Your Account</title>
+</head>
+
+<body>
+    <section class="signUp formSection">
+        <div class="container flex flex-col items-center justify-center">
+            <h2>Welcome back</h2>
+            <form action="login_process" method="post">
+                <fieldset>
+                    <input type="email" id="email" name="email" placeholder="Email address" value="" required>
+                    <button type="submit">Log In</button>
+                </fieldset>
+            </form>
+            <p>Don't have an account? <a href="signup.html">Sign up</a></p>
+            <p>OR</p>
+            <a href="javascript:void(0);" id="signupWithGoogle" class="signupWithGoogle">Continue with Google</a>
+        </div>
+    </section>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="../static/script/script.js"></script>
+
+</html>
